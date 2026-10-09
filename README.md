@@ -1,11 +1,22 @@
-<div align="center">
+# Mr Aryan Service — ATS Resume Studio
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+This repository contains the public website source for Mr Aryan Service. A push to `main` builds the Vite site and deploys it to GitHub Pages using the included GitHub Actions workflow.
 
-  <h1>Built with AI Studio</h2>
+## Run locally
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+Requirements: Node.js 24 and pnpm 11.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+```bash
+pnpm install --frozen-lockfile
+pnpm dev
+```
 
-</div>
+To make a production build locally, run `pnpm build`; the generated site is in `dist/`.
+
+## ATS checker privacy
+
+The published static site runs its basic resume estimate in the visitor's browser. It does not upload resume text to an API. The estimate is guidance only and is not an official score from an employer's applicant-tracking system.
+
+## Deployment
+
+The `Deploy GitHub Pages` workflow builds and publishes the website when changes are pushed to `main`. GitHub Pages is configured for the custom domain `mraryanservice.in`; the domain's DNS must point to GitHub Pages before the custom domain can serve the site.

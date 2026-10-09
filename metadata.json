@@ -1,0 +1,6 @@
+{
+  "name": "Mr Aryan Service - ATS Resume Studio & Booking",
+  "description": "Modern ATS Resume Studio featuring Professional & Basic ATS templates, instant Gemini-powered ATS score auditor, and direct WhatsApp booking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
