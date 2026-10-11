@@ -9,7 +9,7 @@ type PixelFunction = ((...args: unknown[]) => void) & {
 };
 
 declare global {
-  interface Window { fbq?: PixelFunction; __whatsAppTrackingInstalled?: boolean; }
+  interface Window { fbq?: PixelFunction; __siteTrackingInstalled?: boolean; }
 }
 
 export function installMetaPixel() {
@@ -31,20 +31,45 @@ export function installMetaPixel() {
   fbq('track', 'PageView');
 }
 
-export function trackWhatsAppClick() {
-  window.fbq?.('track', 'Contact', { content_name: 'WhatsApp consultation', content_category: 'resume service' });
+export function trackTemplatePreview(templateId: string) {
+  window.fbq?.('track', 'ViewContent', {
+    content_ids: [templateId],
+    content_name: `Resume Template ${templateId}`,
+    content_type: 'product',
+  });
 }
 
-export function installWhatsAppTracking() {
-  if (window.__whatsAppTrackingInstalled) return;
-  window.__whatsAppTrackingInstalled = true;
-  const originalOpen = window.open.bind(window);
-  window.open = ((url?: string | URL, ...args: string[]) => {
-    if (typeof url === 'string' && url.includes('wa.me/')) trackWhatsAppClick();
-    return originalOpen(url, ...args);
-  }) as typeof window.open;
+export function trackTemplateOrder(templateId: string) {
+  window.fbq?.('track', 'Contact', {
+    content_name: `Resume Template ${templateId}`,
+    content_category: 'WhatsApp order',
+  });
+}
+
+function trackProfileClick(destination: string) {
+  window.fbq?.('trackCustom', 'ProfileClick', { destination });
+}
+
+export function installSiteTracking() {
+  if (window.__siteTrackingInstalled) return;
+  window.__siteTrackingInstalled = true;
+
   document.addEventListener('click', (event) => {
-    const link = event.target instanceof Element ? event.target.closest('a[href*="wa.me/"]') : null;
-    if (link) trackWhatsAppClick();
+    const link = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!link) return;
+
+    const href = link.getAttribute('href') || '';
+    if (href.includes('wa.me/')) {
+      window.fbq?.('track', 'Contact', {
+        content_name: 'WhatsApp consultation',
+        content_category: 'resume service',
+      });
+    } else if (href.includes('instagram.com')) {
+      trackProfileClick('Instagram');
+    } else if (href.includes('facebook.com')) {
+      trackProfileClick('Facebook Page');
+    } else if (href.includes('google.com')) {
+      trackProfileClick('Google Business Profile');
+    }
   }, true);
 }
