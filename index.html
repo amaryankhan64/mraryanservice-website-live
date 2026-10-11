@@ -12,10 +12,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+      (() => {
+        const oldNumber = '917497836378';
+        const newNumber = '919306115369';
+        const originalOpen = window.open.bind(window);
+        window.open = (url, ...args) => {
+          if (typeof url === 'string') url = url.replace(oldNumber, newNumber);
+          return originalOpen(url, ...args);
+        };
+        document.addEventListener('click', (event) => {
+          const link = event.target.closest?.('a[href*="wa.me/917497836378"]');
+          if (!link) return;
+          event.preventDefault();
+          window.open(link.href.replace(oldNumber, newNumber), '_blank', 'noopener,noreferrer');
+        }, true);
+      })();
+    </script>
   </head>
   <body class="bg-white text-slate-900 antialiased overflow-x-hidden selection:bg-blue-100 selection:text-blue-900 min-h-screen w-full">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
-
