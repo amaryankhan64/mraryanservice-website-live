@@ -1,4 +1,4 @@
-const PIXEL_ID = '1352849366422188';
+const PIXEL_ID = '1505019721393795';
 
 type PixelFunction = ((...args: unknown[]) => void) & {
   callMethod?: (...args: unknown[]) => void;
