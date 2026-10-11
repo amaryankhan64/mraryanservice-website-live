@@ -11,11 +11,17 @@ import { QuickViewModal } from './components/QuickViewModal';
 import { PolicyModal, PolicyTab } from './components/PolicyModal';
 import { ResumeDesignItem } from './types';
 import { RESUME_DESIGNS, WHATSAPP_SUPPORT_PHONE } from './data/templates';
+import { installMetaPixel, installWhatsAppTracking } from './analytics';
 
 export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedQuickViewDesign, setSelectedQuickViewDesign] = useState<ResumeDesignItem | null>(null);
   const [policyModalTab, setPolicyModalTab] = useState<PolicyTab | null>(null);
+
+  useEffect(() => {
+    installMetaPixel();
+    installWhatsAppTracking();
+  }, []);
 
   const scrollTo = (sectionId: string) => {
     const el = document.getElementById(sectionId);
@@ -26,7 +32,6 @@ export default function App() {
 
   const handleOrderDesignWhatsApp = (design: ResumeDesignItem) => {
     const message = `Hello Aryan bhai, I want to order Resume Design ${design.id}. Please share the next steps.`;
-
     const encoded = encodeURIComponent(message);
     window.open(`https://wa.me/${WHATSAPP_SUPPORT_PHONE}?text=${encoded}`, '_blank', 'noopener,noreferrer');
   };
@@ -38,50 +43,29 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900 w-full max-w-full overflow-x-hidden">
-      
-      {/* 1. Top Notice Ribbon */}
       <TopTickerRibbon />
-
-      {/* 2. Main Navigation Bar with Search */}
       <HeaderNav
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         onNavigate={scrollTo}
         onOpenPolicy={setPolicyModalTab}
       />
-
       <main className="flex-1">
-        {/* 3. Hero Section with Fixed Official Profile */}
         <HeroSection
           onExploreDesigns={() => scrollTo('catalog')}
           onHowItWorks={() => scrollTo('how-it-works')}
           onOrderP000={handleOrderP000}
         />
-
-        {/* 4. Catalog Section */}
         <CatalogSection
           searchQuery={searchQuery}
           onQuickView={(design) => setSelectedQuickViewDesign(design)}
           onOrderDesign={handleOrderDesignWhatsApp}
         />
-
-        {/* 5. Before vs After Transformation Comparison */}
         <BeforeVsAfterSection />
-
-        {/* 6. How It Works: Step-by-Step */}
         <HowItWorks50Advance />
-
-        {/* 7. Delivery Policies & Terms */}
         <PoliciesSection onOpenPolicy={setPolicyModalTab} />
       </main>
-
-      {/* 10. Footer Section */}
-      <FooterSection
-        onNavigate={scrollTo}
-        onOpenPolicy={setPolicyModalTab}
-      />
-
-      {/* 11. Quick View Modal for A4 Layout Preview */}
+      <FooterSection onNavigate={scrollTo} onOpenPolicy={setPolicyModalTab} />
       <QuickViewModal
         design={selectedQuickViewDesign}
         onClose={() => setSelectedQuickViewDesign(null)}
@@ -90,8 +74,6 @@ export default function App() {
           setSelectedQuickViewDesign(null);
         }}
       />
-
-      {/* 12. Interactive Policy Modal (Privacy, Refund, Terms) */}
       <PolicyModal
         isOpen={policyModalTab !== null}
         activeTab={policyModalTab || 'privacy'}
